@@ -28,22 +28,42 @@ namespace Impostor.Server.Net.Inner.Objects.ShipStatus
 
         public Vector2 MeetingSpawnCenter2 { get; } = new Vector2(17.4f, -17.515f);
 
+        public Vector2 ElectricalSpawn { get; } = new Vector2(5.53f, -9.84f);
+        public Vector2 O2Spawn { get; } = new Vector2(3.28f, -21.67f);
+        public Vector2 SpecimenSpawn { get; } = new Vector2(36.54f, -20.84f);
+        public Vector2 LaboSpawn { get; } = new Vector2(34.91f, -6.50f);
+
         public override Vector2 GetSpawnLocation(InnerPlayerControl player, int numPlayers, bool initialSpawn)
         {
-            if (initialSpawn)
-            {
-                return base.GetSpawnLocation(player, numPlayers, initialSpawn);
-            }
+            var rand = new System.Random();
+            int randVal = rand.Next(0,5);
+            switch(randVal){
+                case 0:
+                    return this.InitialSpawnCenter;
+                        // return base.GetSpawnLocation(player, numPlayers, initialSpawn);
+                case 1:
+                    return this.MeetingSpawnCenter;
+                    // var halfPlayers = numPlayers / 2; // floored intentionally
+                    // var spawnId = player.PlayerId % 15;
+                    // if (player.PlayerId < halfPlayers)
+                    // {
+                    //     return this.MeetingSpawnCenter + (new Vector2(0.6f, 0) * spawnId);
+                    // }
+                    // else
+                    // {
+                    //     return this.MeetingSpawnCenter2 + (new Vector2(0.6f, 0) * (spawnId - halfPlayers));
+                    // }
+                case 2:
+                    return this.ElectricalSpawn;
+                case 3:
+                    return this.O2Spawn;
+                case 4:
+                    return this.SpecimenSpawn;
+                case 5:
+                    return this.LaboSpawn;
 
-            var halfPlayers = numPlayers / 2; // floored intentionally
-            var spawnId = player.PlayerId % 15;
-            if (player.PlayerId < halfPlayers)
-            {
-                return this.MeetingSpawnCenter + (new Vector2(0.6f, 0) * spawnId);
-            }
-            else
-            {
-                return this.MeetingSpawnCenter2 + (new Vector2(0.6f, 0) * (spawnId - halfPlayers));
+                default:
+                        return base.GetSpawnLocation(player, numPlayers, initialSpawn);
             }
         }
 
