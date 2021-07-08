@@ -1,8 +1,8 @@
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
 # See for all possible platforms
 # https://github.com/containerd/containerd/blob/master/platforms/platforms.go#L17
-ARG TARGETARCH
+ARG TARGETARCH="amd64"
 
 ARG VERSIONSUFFIX="docker"
 
@@ -35,7 +35,7 @@ RUN case "$TARGETARCH" in \
   dotnet publish -c release -o /app -r "$NETCORE_PLATFORM" -p:VersionSuffix="$VERSIONSUFFIX" --no-restore ./src/Impostor.Server/Impostor.Server.csproj
 
 # Final image.
-FROM --platform=$TARGETPLATFORM mcr.microsoft.com/dotnet/runtime:5.0
+FROM --platform=linux/amd64 mcr.microsoft.com/dotnet/runtime:5.0
 WORKDIR /app
 COPY --from=build /app ./
 EXPOSE 22023/udp
